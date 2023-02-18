@@ -33,7 +33,8 @@ namespace TestRun
             {
                 driver.Navigate().GoToUrl("https://azrapse.es/tor/sheet.html");
                 driver.AwaitForElement("nameInput");
-                
+                var nameBox = driver.FindElement(By.Id("nameInput"));
+                nameBox.SendKeys("Frodo Baggins");
             }
         }
 
