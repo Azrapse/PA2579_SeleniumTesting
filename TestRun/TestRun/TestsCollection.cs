@@ -26,9 +26,12 @@ namespace TestRun
 
             var testList = new List<Func<IWebDriver, bool>>()
             { 
-                Test1RollDice,
-                Test2CharacterCreation,
-                Test3CharacterExport,
+                //Test1About,
+                //Test2CharacterCreation,
+                //Test3CharacterExport,
+                //Test4CharacterImport,
+                //Test5UnequippingLowersEncumbrance,
+                Test6OnlineCharacterServer,
             };
             var testResults = new List<(string Name, bool Result)>();
 

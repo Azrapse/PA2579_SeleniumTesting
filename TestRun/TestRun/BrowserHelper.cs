@@ -23,7 +23,7 @@ namespace TestRun
         {
             var wait = new WebDriverWait(driver, timeout: TimeSpan.FromSeconds(30))
             {
-                PollingInterval = TimeSpan.FromSeconds(5),
+                PollingInterval = TimeSpan.FromSeconds(5),         
             };
             wait.IgnoreExceptionTypes(typeof(NoSuchElementException));
             return wait.Until(drv => drv.FindElement(elementMatch));

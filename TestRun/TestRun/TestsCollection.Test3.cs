@@ -29,8 +29,13 @@ namespace TestRun
             bool result;
             try
             {
-                JsonObject.Parse(data);
-                result = true;
+                // If the data is correctly parseable...
+                var jsonObject = JsonNode.Parse(data);
+
+                // check that the values for the attributes are correct.
+                result = jsonObject?["body"]?.ToString() == "2"
+                    && jsonObject?["heart"]?.ToString() == "7"
+                    && jsonObject?["wits"]?.ToString() == "5";
             }
             catch
             {
