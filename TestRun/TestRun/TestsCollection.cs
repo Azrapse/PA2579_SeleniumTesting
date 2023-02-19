@@ -1,23 +1,18 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Nodes;
 using WebDriverManager;
 using WebDriverManager.DriverConfigs;
-using WebDriverManager.DriverConfigs.Impl;
 
 namespace TestRun
-{    
-    public class TestsCollection
-    {
+{
+    public static partial class TestsCollection
+    {        
+
         public static void Start(Func<IDriverConfig> configGetter, Func<IWebDriver> driverGetter)
         {
+            // Connect to the selected browser.
             var config = configGetter();
-            var manager = new DriverManager().SetUpDriver(config);
+            new DriverManager().SetUpDriver(config);
             
             IWebDriver driver;
             try 
@@ -28,19 +23,32 @@ namespace TestRun
             {
                 throw new Exception("Problems initializing browser driver.", ex);
             }
+
+            var testList = new List<Func<IWebDriver, bool>>()
+            { 
+                Test1RollDice,
+                Test2CharacterCreation,
+                Test3CharacterExport,
+            };
+            var testResults = new List<(string Name, bool Result)>();
+
             // Making sure the driver is released at the end of execution.
-            //using (driver)
+            using (driver)
             {
-                driver.Navigate().GoToUrl("https://azrapse.es/tor/sheet.html");
-                driver.AwaitForElement("nameInput");
-                var nameBox = driver.FindElement(By.Id("nameInput"));
-                nameBox.SendKeys("Frodo Baggins");
+                foreach (var test in testList)
+                {
+                    var result = test(driver);
+                    testResults.Add((test.Method.Name, result));
+                }
+            }
+
+            Console.Clear();
+            Console.WriteLine("Test results:");
+            foreach(var test in testResults)
+            {
+                Console.WriteLine($"{test.Name}: {test.Result}");
             }
         }
 
-        public static bool Test1(IWebDriver driver)
-        {
-            return false;
-        }
     }
 }
