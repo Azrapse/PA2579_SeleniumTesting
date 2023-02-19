@@ -31,7 +31,8 @@ namespace TestRun
                 //Test3CharacterExport,
                 //Test4CharacterImport,
                 //Test5UnequippingLowersEncumbrance,
-                Test6OnlineCharacterServer,
+                //Test6OnlineCharacterServer,
+                Test7RollDice,
             };
             var testResults = new List<(string Name, bool Result)>();
 
