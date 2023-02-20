@@ -1,10 +1,5 @@
-﻿using OpenQA.Selenium;
-using System;
-using System.Buffers.Text;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 
 namespace TestRun
 {
@@ -17,13 +12,23 @@ namespace TestRun
             return File.ReadAllText(path);
         }
 
-        public static bool Test4CharacterImport(IWebDriver driver)
+        [Test]
+        /// <summary>
+        /// Test that the application correctly imports the test character, then check that the name contains "Aragorn" at the end
+        /// of the process.
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
+        public static void Test4CharacterImport(IWebDriver driver)
         {
             // Go to site.
             driver.Navigate().GoToUrl("https://azrapse.es/tor/sheet.html");
 
             // Let's test the import feature to determine that it loads a character's JSON.
-            driver.AwaitForElement(By.Id("loadButton")).Click();
+            var loadButton = driver.AwaitForElement(By.Id("loadButton"));
+            // Often, it's not enough to wait for the element to be present. You need to wait a while for it to be interactable.
+            Thread.Sleep(1000);
+            loadButton.Click();
 
             var json = GetTestJson();
 
@@ -38,7 +43,7 @@ namespace TestRun
 
             // Check that the name of the character contains "Aragorn".
             var nameBox = driver.AwaitForElement(By.Id("nameInput"));
-            return nameBox.GetAttribute("value").Contains("Aragorn");
+            Assert.That(nameBox.GetAttribute("value").Contains("Aragorn"));
         }
     }
 }

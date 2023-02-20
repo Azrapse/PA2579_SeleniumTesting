@@ -21,6 +21,6 @@ var selectedBrowser = supportedBrowsers[index - 1];
 Console.WriteLine($"Selected '{selectedBrowser.Key}' browser!\nPerforming tests...\n");
 
 // Start the test collection with the selected browser's config and driver.
-(var lazyConfig, var lazyDriver) = selectedBrowser.Value;
+var (lazyConfig, lazyDriver) = selectedBrowser.Value;
 
 TestsCollection.Start(lazyConfig, lazyDriver);

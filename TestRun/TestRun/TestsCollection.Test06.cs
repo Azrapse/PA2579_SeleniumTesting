@@ -1,21 +1,26 @@
-﻿using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 
 namespace TestRun
 {
     public static partial class TestsCollection
     {
-        public static bool Test6OnlineCharacterServer(IWebDriver driver)
+        [Test]
+        /// <summary>
+        /// Test the Online Character Server feature by opening it, then loading all public characters, then loading one of them at random.
+        /// The test is considered passed if the "Culture" input in the character sheet changes to anything at all.
+        /// (Even an invalid character will fill up the Culture input with some "undefined" text, which is not an error.)
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
+        public static void Test6OnlineCharacterServer(IWebDriver driver)
         {
             // Go to site.
             driver.Navigate().GoToUrl("https://azrapse.es/tor/sheet.html");
 
             // Click the online character server button
             var characterServerButton = driver.AwaitForElement(By.Id("onlineButton"));
+            // Often, it's not enough to wait for the element to be present. You need to wait a while for it to be interactable.            
             Thread.Sleep(1000);
             characterServerButton.Click();
 
@@ -39,12 +44,11 @@ namespace TestRun
                 attempts--;
                 if (attempts < 0)
                 {
-                    return false;
+                    break;
                 }
                 Thread.Sleep(1000);
             }
-
-            return true;
+            Assert.That(!string.IsNullOrWhiteSpace(cultureInput.Text));
         }
     }
 }

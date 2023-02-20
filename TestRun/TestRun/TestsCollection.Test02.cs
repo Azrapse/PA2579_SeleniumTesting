@@ -1,16 +1,17 @@
-﻿using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 
 namespace TestRun
 {
     public static partial class TestsCollection
     {
-        public static bool Test2CharacterCreation(IWebDriver driver)
+        [Test]
+        /// <summary>
+        /// Test that after creating a hobbit of Took blood and particular background, he ends up having Body=2, Heart=7, Wits=2
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
+        public static void Test2CharacterCreation(IWebDriver driver)
         {
             // Go to site.
             driver.Navigate().GoToUrl("https://azrapse.es/tor/sheet.html");
@@ -22,16 +23,18 @@ namespace TestRun
             var bodyScore = driver.AwaitForElement(By.Id("bodyScoreInput"));
             var heartScore = driver.AwaitForElement(By.Id("heartScoreInput"));
             var witsScore = driver.AwaitForElement(By.Id("witsScoreInput"));
-            var result = bodyScore.GetAttribute("value") == "2"
-                && heartScore.GetAttribute("value") == "7"
-                && witsScore.GetAttribute("value") == "5";
-            return result;
+
+            Assert.That(bodyScore.GetAttribute("value") == "2");
+            Assert.That(heartScore.GetAttribute("value") == "7");
+            Assert.That(witsScore.GetAttribute("value") == "5");            
         }
 
         private static void CreateTookHobbitCharacter(IWebDriver driver)
         {
             // Click the button to start the Create New Character tutorial
             var startButton = driver.AwaitForElement(By.Id("startButton"));
+            // Often, it's not enough to wait for the element to be present. You need to wait a while for it to be interactable.
+            Thread.Sleep(1000);
             startButton?.Click();
 
             // Click the button to select the Shire Hobbit race.

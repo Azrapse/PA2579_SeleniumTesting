@@ -1,15 +1,18 @@
-﻿using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 
 namespace TestRun
 {
     public static partial class TestsCollection
     {
-        public static bool Test5UnequippingLowersEncumbrance(IWebDriver driver)
+        [Test]
+        /// <summary>
+        /// Import "Aragorn" again, then test that the character is suffering a certain amount of fatigue due to the weight of
+        /// his gear. Then unequip his long sword, and check that he is not suffering the same amount of fatigue after that.
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
+        public static void Test5UnequippingLowersEncumbrance(IWebDriver driver)
         {
             // Go to site.
             driver.Navigate().GoToUrl("https://azrapse.es/tor/sheet.html");
@@ -29,13 +32,14 @@ namespace TestRun
             var firstGear = driver.AwaitForElement(By.Id("weaponGearTable"))
                 .FindElements(By.ClassName("weaponGearCarriedStatus"))
                 .FirstOrDefault();
+            // This click unequips the sword.
             firstGear?.Click();
-
-            Thread.Sleep(100);
+            // It might take a while for the javascript to recalculate the fatigue.
+            Thread.Sleep(1000);
 
             var afterValue = fatigueInput?.GetAttribute("value");
 
-            return previousValue != afterValue;
+            Assert.That(previousValue != afterValue);
         }
     }
 }
